@@ -8,6 +8,28 @@ use Pegex::Tree::Wrap;
 
 use XXX;
 
+{
+  package TinyDNS::Data;
+  use base 'Pegex::Tree::Wrap';
+
+  use XXX;
+
+  sub initial {
+    print "Starting out...\n"
+  }
+
+  sub final {
+    my ($self, $got) = @_;
+    XXX $got;
+  }
+
+  sub got_AAAA {
+    my ($self, $got) = @_;
+    $got->[1] =~ s/\\\d+/Foo/g;
+    $got;
+  }
+}
+
 # $ENV{PERL_PEGEX_DEBUG} = 1;
 
 my $grammar = Pegex::Grammar->new(
@@ -16,10 +38,10 @@ my $grammar = Pegex::Grammar->new(
 
 my $parser = Pegex::Parser->new(
   grammar => $grammar,
-  receiver => Pegex::Tree::Wrap->new,
+  receiver => TinyDNS::Data->new,
   debug => $ENV{DEBUG},
 );
 
 my $input = do {local $/; <>};
 
-XXX $parser->parse($input);
+my $result = $parser->parse($input);
